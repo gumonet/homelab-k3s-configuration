@@ -6,9 +6,9 @@ metadata:
 
 resources:
   - ../base
-replicas:
-  - count: 1
-    name: webserver1
+# replicas:
+#   - count: 1
+#     name: webserver1
 # patches:
 #   - path: cpu_memory_count.yaml
 #     target:
