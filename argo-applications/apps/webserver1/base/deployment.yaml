@@ -20,7 +20,6 @@ spec:
               ISTIO_META_DNS_CAPTURE: "true"
               ISTIO_META_DNS_AUTO_ALLOCATE: "true"
     spec:
-      serviceAccountName: webserver1-service-account
       containers:
         - name: webserver1
           image: public.ecr.aws/nginx/nginx:stable-perl
