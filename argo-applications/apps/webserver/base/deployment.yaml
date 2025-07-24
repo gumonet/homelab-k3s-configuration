@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cluster1-webserver
-  namespace: cluster1-webserver
+  name: webserver1
+  namespace: webserver1
   labels:
-    app: cluster1-webserver
+    app: webserver1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cluster1-webserver
+      app: webserver1
   template:
     metadata:
       labels:
-        app: cluster1-webserver
+        app: webserver1
       annotations:
         proxy.istio.io/config: |
           proxyMetadata:
               ISTIO_META_DNS_CAPTURE: "true"
               ISTIO_META_DNS_AUTO_ALLOCATE: "true"
     spec:
-      serviceAccountName: cluster1-webserver-service-account
+      serviceAccountName: webserver1-service-account
       containers:
-        - name: cluster1-webserver
+        - name: webserver1
           image: public.ecr.aws/nginx/nginx:stable-perl
           imagePullPolicy: IfNotPresent
           ports:
