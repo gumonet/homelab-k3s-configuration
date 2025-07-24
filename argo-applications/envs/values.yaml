@@ -1,0 +1,11 @@
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: git@git-homelab:gumonet/argo-workloads.git
+    targetRevision: main
+  clusterName: gumonet
+  blueprint: "cdk"
+  ingress:
+    type: "alb"
+    host:

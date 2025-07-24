@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster1-webserver
+spec:
+  template:
+    spec:
+      containers:
+        - name: cluster1-webserver
+          resources:
+            requests:
+              cpu: 250m
+              memory: 200Mi

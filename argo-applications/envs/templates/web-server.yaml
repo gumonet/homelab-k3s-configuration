@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gumonet
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: dev
+  destination:
+    namespace: gumonet
+    server:
+      # prettier-ignore
+      {{ .Values.destinationServer | default .Values.spec.destination.server }}
+  source:
+    # prettier-ignore
+    repoURL: {{ .Values.spec.source.repoURL }}
+    # prettier-ignore
+    targetRevision: {{ .Values.spec.source.targetRevision }}
+    path: argo-applications/apps/webserver/overlays
