@@ -9,8 +9,8 @@ resources:
 replicas:
   - count: 1
     name: webserver1
-# patches:
-#   - path: cpu_memory_count.yaml
-#     target:
-#       kind: Deployment
-#       namespace: webserver1
+patches:
+  - path: cpu_memory_count.yaml
+    target:
+      kind: Deployment
+      namespace: webserver1

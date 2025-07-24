@@ -3,8 +3,7 @@ kind: Kustomization
 
 resources:
   - deployment.yaml
-  #  - service.yaml
-  #  - service-account.yaml
+  - service.yaml
   - namespace.yaml
 #  - istio-destination-rule.yaml
 #  - istio-vs.yaml
