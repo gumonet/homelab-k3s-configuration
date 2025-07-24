@@ -2,7 +2,7 @@ spec:
   destination:
     server: https://kubernetes.default.svc
   source:
-    repoURL: git@git-homelab:gumonet/argo-workloads.git
+    repoURL: http://192.16.0.20:3002/gumonet/argo-workloads.git
     targetRevision: main
   clusterName: gumonet
   blueprint: "cdk"
