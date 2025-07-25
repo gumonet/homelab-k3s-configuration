@@ -26,12 +26,9 @@ spec:
               - url: http://192.16.0.20:20291/api/v1/receive
                 headers:
                   THANOS-TENANT: mycluster-dev
-       
-    # prettier-ignore
-    path: argo-applications/apps/prometheus/overlays
-    kustomize:
-      buildOptions: "--enable-helm"
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
