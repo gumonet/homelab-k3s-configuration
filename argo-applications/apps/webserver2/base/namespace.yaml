@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: webserver2
+  labels:
+    mesh: gumonet
+    istio-injection: enabled

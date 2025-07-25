@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver2
+  namespace: webserver2
+  labels:
+    app: webserver2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webserver2
+  template:
+    metadata:
+      labels:
+        app: webserver2
+      annotations:
+        proxy.istio.io/config: |
+          proxyMetadata:
+              ISTIO_META_DNS_CAPTURE: "true"
+              ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+    spec:
+      containers:
+        - name: webserver2
+          image: httpd
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi

@@ -1,0 +1,10 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: webserver2-destination-rule
+spec:
+  host: api.webserver2.svc.cluster.local
+  subsets:
+    - name: v1
+      labels:
+        app: webserver2

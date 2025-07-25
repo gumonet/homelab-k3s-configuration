@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  namespace: webserver2
+
+resources:
+  - ../base
+replicas:
+  - count: 1
+    name: webserver2
+patches:
+  - path: cpu_memory_count.yaml
+    target:
+      kind: Deployment
+      namespace: webserver2
