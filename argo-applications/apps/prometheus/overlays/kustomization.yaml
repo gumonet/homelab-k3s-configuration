@@ -4,5 +4,8 @@ kind: Kustomization
 resources:
   - ../base
 
-patchesStrategicMerge:
-  - values.yaml
+patches:
+  - path: values.yaml
+    target:
+      kind: HelmChart
+      name: kube-prometheus-stack

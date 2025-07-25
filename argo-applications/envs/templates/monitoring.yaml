@@ -18,6 +18,8 @@ spec:
     # prettier-ignore
     targetRevision: {{ .Values.spec.source.targetRevision }}
     path: argo-applications/apps/prometheus/overlays
+    kustomize:
+      buildOptions: "--enable-helm"
   syncPolicy:
     automated:
       prune: true
