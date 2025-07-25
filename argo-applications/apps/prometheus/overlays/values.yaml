@@ -1,0 +1,6 @@
+prometheus:
+  prometheusSpec:
+    remoteWrite:
+      - url: http://thanos-receive.monitoring.svc.cluster.local:19291/api/v1/receive
+        headers:
+          THANOS-TENANT: k3s-dev
