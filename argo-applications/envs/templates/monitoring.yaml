@@ -26,6 +26,10 @@ spec:
               - url: http://192.16.0.20:20291/api/v1/receive
                 headers:
                   THANOS-TENANT: mycluster-dev
+        alertmanager:
+          enabled: false
+        grafana:
+          enabled: false
   syncPolicy:
     automated:
       prune: true
