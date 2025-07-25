@@ -30,6 +30,13 @@ spec:
           enabled: false
         grafana:
           enabled: false
+        defaultRules:
+          create: true
+        prometheusOperator:
+          enabled: true
+        kubePrometheusStack:
+          prometheusOperator:
+            enabled: true
   syncPolicy:
     automated:
       prune: true
