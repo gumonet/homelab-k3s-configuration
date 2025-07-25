@@ -1,6 +1,0 @@
-prometheus:
-  prometheusSpec:
-    remoteWrite:
-      - url: http://192.16.0.20:20291/api/v1/receive
-        headers:
-          THANOS-TENANT: k3s-dev

@@ -14,9 +14,20 @@ spec:
       {{ .Values.destinationServer | default .Values.spec.destination.server }}
   source:
     # prettier-ignore
-    repoURL: {{ .Values.spec.source.repoURL }}
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 56.6.1
+    helm:
+      releaseName: prometheus
+      valueFiles: |
+        prometheus:
+          prometheusSpec:
+            remoteWrite:
+              - url: http://192.16.0.20:20291/api/v1/receive
+                headers:
+                  THANOS-TENANT: mycluster-dev
+       
     # prettier-ignore
-    targetRevision: {{ .Values.spec.source.targetRevision }}
     path: argo-applications/apps/prometheus/overlays
     kustomize:
       buildOptions: "--enable-helm"
