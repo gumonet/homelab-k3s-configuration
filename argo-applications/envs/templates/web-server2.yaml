@@ -18,3 +18,7 @@ spec:
     # prettier-ignore
     targetRevision: {{ .Values.spec.source.targetRevision }}
     path: argo-applications/apps/webserver2/overlays
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
