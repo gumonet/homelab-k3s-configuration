@@ -22,16 +22,44 @@ helm install istio-base istio/base \
   --set global.externalIstiod=false \
   --set global.base.enableIstioConfigCRDs=true
 
-# Install control plane
+# Install control plane with telemetry enabled and metrics enabled
 helm install istiod istio/istiod \
   --namespace istio-system \
   --version 1.26.2 \
   --set global.meshID="gumonet" \
   --set global.multiCluster.clusterName="gumonet" \
   --set global.network="gumonet" \
+  --set meshConfig.enablePrometheusMerge=true \
   --set meshConfig.defaultConfig.tracing.sampling=100.0 \
-  --set meshConfig.defaultConfig.tracing.zipkin.address="tempo.monitoring.svc.cluster.local:9411" \
-  --set meshConfig.defaultConfig.tracing.customTags.request_id.header.name="x-request-id"
+  --set meshConfig.defaultConfig.tracing.zipkin.address="192.16.0.20:9411" \
+  --set meshConfig.defaultConfig.tracing.customTags.request_id.header.name="x-request-id" \
+  --set telemetry.enabled=true \
+  --set telemetry.v2.enabled=true \
+  --set telemetry.v2.prometheus.enabled=true \
+  --set serviceMonitor.enabled=true \
+  --set serviceMonitor.selectorNilUsesHelmValues=true \
+  --set serviceMonitor.additionalLabels.release=prometheus
+```
+
+### Solo actualizar istiod
+
+```bash
+helm upgrade istiod istio/istiod \
+  --namespace istio-system \
+  --version 1.26.2 \
+  --set global.meshID="gumonet" \
+  --set global.multiCluster.clusterName="gumonet" \
+  --set global.network="gumonet" \
+  --set meshConfig.enablePrometheusMerge=true \
+  --set meshConfig.defaultConfig.tracing.sampling=100.0 \
+  --set meshConfig.defaultConfig.tracing.zipkin.address="192.16.0.20:9411" \
+  --set meshConfig.defaultConfig.tracing.customTags.request_id.header.name="x-request-id" \
+  --set telemetry.enabled=true \
+  --set telemetry.v2.enabled=true \
+  --set telemetry.v2.prometheus.enabled=true \
+  --set serviceMonitor.enabled=true \
+  --set serviceMonitor.selectorNilUsesHelmValues=true \
+  --set serviceMonitor.additionalLabels.release=prometheus
 ```
 
 # Install argocd in cluster using charts
@@ -42,13 +70,18 @@ helm repo update
 kubectl create namespace argocd
 
 #Create argocd password
-# Requiere apache2-utils en Linux/macOS
-argopwd=$(htpasswd -nbBC 10 "" 'TuPasswordSegura' | tr -d ':\n')
 
 #Install argocd
 helm install argocd argo/argo-cd \
   --namespace argocd \
-  --set configs.secret.argocdServerAdminPassword='$argopwd'
+  --set configs.secret.argocdServerAdminPassword='temppwd'
+
+# Genera la contraseña en bcrypt
+export ARGOCD_ADMIN_PASSWORD=$(htpasswd -nbBC 10 "" "MyNewSecurePassword" | tr -d ':\n' | sed 's/^\\$2y/\\$2a/')
+
+# Parchea el Secret
+kubectl -n argocd patch secret argocd-secret \
+  -p "{\"stringData\": {\"admin.password\": \"$ARGOCD_ADMIN_PASSWORD\"}}"
 
 #Update password if is necessary
 helm upgrade argocd argo/argo-cd \
@@ -88,4 +121,10 @@ kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-oper
 helm upgrade argocd argo/argo-cd \
   --namespace argocd \
   -f config-manifest/argocd-values.yaml
+```
+
+## Metrics for istio
+
+```bash
+kubectl apply -f config-manifest/istio-telemetry.yaml
 ```

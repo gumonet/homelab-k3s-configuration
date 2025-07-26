@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fluent-bit
+  namespace: argocd
+spec:
+  project: dev
+  destination:
+    namespace: logging
+    # prettier-ignore
+    server: {{ .Values.destinationServer | default .Values.spec.destination.server }}
+  source:
+    # prettier-ignore
+    repoURL: {{ .Values.spec.source.repoURL }}
+    # prettier-ignore
+    targetRevision: {{ .Values.spec.source.targetRevision }}
+    path: pci/apps/fluent-bit/overlays
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
