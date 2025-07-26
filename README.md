@@ -79,3 +79,13 @@ kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-oper
 kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
 kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml
 ```
+
+# Enable metrics
+
+## Metrics for argocd
+
+```bash
+helm upgrade argocd argo/argo-cd \
+  --namespace argocd \
+  -f config-manifest/argocd-values.yaml
+```
