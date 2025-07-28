@@ -22,10 +22,21 @@ spec:
     spec:
       containers:
         - name: webserver2
-          image: httpd
+          image: 192.16.0.20:5000/service-a:v1
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 80
+            - containerPort: 8081
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://192.16.0.20:4318
+            - name: DB_HOST
+              value: 192.16.0.20
+            - name: DB_USER
+              value: gm_user
+            - name: DB_PASS
+              value: ~bPjUAY|aP,"ps_2
+            - name: DB_NAME
+              value: homelab
           resources:
             requests:
               cpu: 100m
