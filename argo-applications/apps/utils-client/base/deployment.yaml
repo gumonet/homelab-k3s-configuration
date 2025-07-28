@@ -22,8 +22,9 @@ spec:
     spec:
       containers:
         - name: utils-client
-          image: nicolaka/netshoot
+          image: nicolaka/netshoot:latest
           imagePullPolicy: IfNotPresent
+          command: ["sleep", "infinity"]
           resources:
             requests:
               cpu: 100m
