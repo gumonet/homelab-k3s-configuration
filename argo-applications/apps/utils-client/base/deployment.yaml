@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: utils-client
+  namespace: utils-client
+  labels:
+    app: utils-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: utils-client
+  template:
+    metadata:
+      labels:
+        app: utils-client
+      annotations:
+        proxy.istio.io/config: |
+          proxyMetadata:
+              ISTIO_META_DNS_CAPTURE: "true"
+              ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+    spec:
+      containers:
+        - name: utils-client
+          image: nicolaka/netshoot
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
