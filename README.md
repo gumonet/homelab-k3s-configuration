@@ -128,3 +128,24 @@ helm upgrade argocd argo/argo-cd \
 ```bash
 kubectl apply -f config-manifest/istio-telemetry.yaml
 ```
+
+## Set your custom registry in k3s
+
+```bash
+sudo nano /etc/rancher/k3s/registries.yaml
+```
+
+Add the following content:
+
+```yaml
+mirrors:
+  "192.16.0.20:5000":
+    endpoint:
+      - "http://192.16.0.20:5000"
+```
+
+Restart k3s service to apply changes:
+
+```bash
+sudo systemctl restart k3s
+```
