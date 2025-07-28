@@ -14,21 +14,20 @@ spec:
       labels:
         app: fluent-bit
     spec:
-      serviceAccountName: fluent-bit
       containers:
-      - name: fluent-bit
-        image: fluent/fluent-bit:3.2.0
-        imagePullPolicy: IfNotPresent
-        ports:
-          - containerPort: 2020
-        volumeMounts:
-          - name: varlog
-            mountPath: /var/log
-          - name: varlibdockercontainers
-            mountPath: /var/lib/docker/containers
-            readOnly: true
-          - name: config
-            mountPath: /fluent-bit/etc/
+        - name: fluent-bit
+          image: fluent/fluent-bit:3.2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 2020
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
+              readOnly: true
+            - name: config
+              mountPath: /fluent-bit/etc/
       volumes:
         - name: varlog
           hostPath:
