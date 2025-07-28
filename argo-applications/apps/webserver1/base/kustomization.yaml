@@ -5,5 +5,5 @@ resources:
   - deployment.yaml
   - service.yaml
   - namespace.yaml
-  - istio-destination-rule.yaml
-  - istio-vs.yaml
+  #- istio-destination-rule.yaml
+  #- istio-vs.yaml
