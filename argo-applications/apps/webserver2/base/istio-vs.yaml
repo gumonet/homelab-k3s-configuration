@@ -10,3 +10,13 @@ spec:
         - destination:
             host: api.webserver2.svc.cluster.local
             subset: v1
+---
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: mesh-default
+  namespace: webserver2
+spec:
+  accessLogging:
+    - providers:
+        - name: envoy
