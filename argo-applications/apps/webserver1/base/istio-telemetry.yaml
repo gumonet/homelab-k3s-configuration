@@ -1,8 +1,8 @@
 apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
 metadata:
-  name: mesh-default
-  namespace: webserver2
+  name: access-logging
+  namespace: webserver1
 spec:
   accessLogging:
     - providers:
