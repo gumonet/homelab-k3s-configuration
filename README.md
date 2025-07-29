@@ -38,7 +38,9 @@ helm install istiod istio/istiod \
   --set telemetry.v2.prometheus.enabled=true \
   --set serviceMonitor.enabled=true \
   --set serviceMonitor.selectorNilUsesHelmValues=true \
-  --set serviceMonitor.additionalLabels.release=prometheus
+  --set serviceMonitor.additionalLabels.release=prometheus \
+  --set values.cni.enabled=true \
+  --set values.global.istioNamespace=istio-system
 ```
 
 ### Solo actualizar istiod
@@ -59,7 +61,20 @@ helm upgrade istiod istio/istiod \
   --set telemetry.v2.prometheus.enabled=true \
   --set serviceMonitor.enabled=true \
   --set serviceMonitor.selectorNilUsesHelmValues=true \
-  --set serviceMonitor.additionalLabels.release=prometheus
+  --set serviceMonitor.additionalLabels.release=prometheus \
+  --set values.cni.enabled=false \
+  --set values.global.istioNamespace=istio-system
+```
+
+## Install istio cni
+
+```bash
+helm upgrade cni istio/cni \
+  --namespace istio-system \
+  --set cni.enabled=true \
+  --set cni.logLevel=debug \
+  --set cni.excludeNamespaces="{kube-system,istio-system}"
+
 ```
 
 # Install argocd in cluster using charts
