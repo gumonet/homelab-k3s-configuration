@@ -61,6 +61,7 @@ data:
     [OUTPUT]
         name          loki
         host          192.16.0.20
+        match         *
         port          3100
         uri           /loki/api/v1/push
         labels        job=fluent-bit,cluster=olympus,container=$kubernetes['container_name'],pod=$kubernetes['pod_name'],namespace=$kubernetes['namespace_name'],app=$kubernetes['labels']['app']
