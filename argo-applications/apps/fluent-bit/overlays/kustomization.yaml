@@ -6,9 +6,8 @@ metadata:
 
 resources:
   - ../base
-
-patches:
-  - path: patch-configmap-dev.yaml
-    target:
-      kind: ConfigMap
-      namespace: logging
+# patches:
+#   - path: patch-configmap-dev.yaml
+#     target:
+#       kind: ConfigMap
+#       namespace: logging
