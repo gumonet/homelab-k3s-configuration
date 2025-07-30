@@ -25,7 +25,7 @@ data:
         Tag               kube.*
         Path              /var/log/containers/*.log
         #Parser_First      json_log_processed
-        Parser            cri
+        #Parser            cri
         DB                /var/log/flb_kube.db
         Mem_Buf_Limit     20MB
         Skip_Long_Lines   On
@@ -43,27 +43,27 @@ data:
         Annotations         On
         Labels              On
 
-    [FILTER]
-        Name    parser
-        Match   kube.*
-        Key_Name message
-        Parser  json_log_processed
-        Reserve_Data  On
+    # [FILTER]
+    #     Name    parser
+    #     Match   kube.*
+    #     Key_Name message
+    #     Parser  json_log_processed
+    #     Reserve_Data  On
 
   output-loki.conf: |
     [OUTPUT]
 
   parsers.conf: |
 
-    [PARSER]
-        Name        cri
-        Format      regex
-        Regex       ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<message>.*)$
-        Time_Key    time
-        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
-        Time_Keep   On
+    # [PARSER]
+    #     Name        cri
+    #     Format      regex
+    #     Regex       ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<message>.*)$
+    #     Time_Key    time
+    #     Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+    #     Time_Keep   On
 
-    [PARSER]
-        Name        json_log_processed
-        Format      json
-        Time_Keep   On
+    # [PARSER]
+    #     Name        json_log_processed
+    #     Format      json
+    #     Time_Keep   On
