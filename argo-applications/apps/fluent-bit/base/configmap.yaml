@@ -54,7 +54,7 @@ data:
         #remove_keys   stream,time
         #line_format   json
         retry_limit   False
-        compress      gzip
+        #compress      gzip
 
   parsers.conf: |
     [PARSER]
