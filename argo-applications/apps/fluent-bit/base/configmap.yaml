@@ -45,14 +45,14 @@ data:
     [OUTPUT]
         name stdout
         match         kube.*
-        host          192.16.0.20
-        port          3100
-        uri           /loki/api/v1/push
-        tenant_id     ""
-        labels        job=fluent-bit,namespace=$kubernetes['namespace_name'],pod=$kubernetes['pod_name'],container=$kubernetes['container_name']
-        auto_kubernetes_labels  on
-        remove_keys   stream,time
-        line_format   json
+        #host          192.16.0.20
+        #port          3100
+        #uri           /loki/api/v1/push
+        #tenant_id     ""
+        #labels        job=fluent-bit,namespace=$kubernetes['namespace_name'],pod=$kubernetes['pod_name'],container=$kubernetes['container_name']
+        #auto_kubernetes_labels  on
+        #remove_keys   stream,time
+        #line_format   json
         retry_limit   False
         compress      gzip
 
