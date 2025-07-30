@@ -39,13 +39,11 @@ data:
         Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
         Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
         Kube_Tag_Prefix     kube.var.log.containers.
-        Merge_Log           On
-        Merge_Log_Key       log
+        #Merge_Log           On
+        #Merge_Log_Key       message
         Keep_Log            On
-        Labels              On
         Annotations         On
-        K8S-Logging.Parser  On
-        K8S-Logging.Exclude Off
+        Labels              On
 
     [FILTER]
         Name    parser
@@ -54,34 +52,26 @@ data:
         Parser  json_log_processed
         Reserve_Data  On
 
-    [FILTER]
-        Name    grep
-        Match   kube.*
-        Exclude container_name fluent-bit
-
   output-loki.conf: |
     [OUTPUT]
         name          loki
-        host          192.16.0.20
         match         *
+        host          192.168.0.20
         port          3100
         uri           /loki/api/v1/push
-        labels        job=fluent-bit,cluster=gumonet,container=$kubernetes['container_name'],pod=$kubernetes['pod_name'],namespace=$kubernetes['namespace_name'],app=$kubernetes['labels']['app']
-        #remove_keys   kubernetes,stream,time,app_kubernetes_io_managed_by,helm_sh_chart,install_operator_istio_io_owning_resource,istio_io_dataplane_mode,istio_io_rev,operator_istio_io_component
-        auto_kubernetes_labels  on
+        labels        job=fluent-bit-eks,gumonet=olympus,container=$kubernetes['container_name'],pod=$kubernetes['pod_name'],namespace=$kubernetes['namespace_name'],app=$kubernetes['labels']['app']
+        remove_keys   kubernetes,stream,time,app_kubernetes_io_managed_by,helm_sh_chart,install_operator_istio_io_owning_resource,istio_io_dataplane_mode,istio_io_rev,operator_istio_io_component
+        #auto_kubernetes_labels  on
         structured_metadata      container=$kubernetes['container_name'],pod=$kubernetes['pod_name'],namespace=$kubernetes['namespace_name'],app=$kubernetes['labels']['app']
+        #structured_metadata    on
         retry_limit              False
         compress                 gzip
         tenant_id               ""
         line_format              json
-        #drop_single_key          true
-
-    # [OUTPUT]
-    #     name          stdout
-    #     match         *
-    #     format        json_lines
+        drop_single_key          true
 
   parsers.conf: |
+
     [PARSER]
         Name        cri
         Format      regex
