@@ -43,7 +43,7 @@ data:
 
   output-loki.conf: |
     [OUTPUT]
-        name          loki
+        name stdout
         match         kube.*
         host          192.16.0.20
         port          3100
@@ -55,7 +55,6 @@ data:
         line_format   json
         retry_limit   False
         compress      gzip
-        name stdout
 
   parsers.conf: |
     [PARSER]
