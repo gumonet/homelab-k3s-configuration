@@ -55,6 +55,7 @@ data:
         line_format   json
         retry_limit   False
         compress      gzip
+        name stdout
 
   parsers.conf: |
     [PARSER]
