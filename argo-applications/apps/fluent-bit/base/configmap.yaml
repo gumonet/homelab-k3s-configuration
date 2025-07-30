@@ -39,8 +39,8 @@ data:
         Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
         Kube_Tag_Prefix     kube.var.log.containers.
         Merge_Log           On
-        Merge_Log_Key       log_processed
-        Keep_Log            On
+        Merge_Log_Key       log
+        Keep_Log            Off
         Annotations         On
         Labels              On
 
@@ -54,7 +54,7 @@ data:
         labels        job=fluent-bit,cluster=olympus,container=$kubernetes['container_name']
         remove_keys   kubernetes,stream,time
         auto_kubernetes_labels  on
-        structured_metadata      $kubernetes['pod_name'],$kubernetes['namespace_name'],$kubernetes['container_name']
+        #structured_metadata      $kubernetes['pod_name'],$kubernetes['namespace_name'],$kubernetes['container_name']
         retry_limit              False
         compress                 gzip
         tenant_id               ""
