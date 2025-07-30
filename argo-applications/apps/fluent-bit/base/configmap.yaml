@@ -53,6 +53,11 @@ data:
         Parser  json_log_processed
         Reserve_Data  On
 
+    [FILTER]
+        Name    grep
+        Match   kube.*
+        Exclude container_name fluent-bit
+
   output-loki.conf: |
     [OUTPUT]
         name          loki
