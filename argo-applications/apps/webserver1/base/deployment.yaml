@@ -30,7 +30,7 @@ spec:
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: http://192.16.0.20:4318
             - name: SERVICE_B_URL
-              value: api.webserver1.svc.cluster.local
+              value: api.webserver2.svc.cluster.local
           resources:
             requests:
               cpu: 100m
