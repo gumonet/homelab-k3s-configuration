@@ -73,10 +73,10 @@ data:
         tenant_id               ""
         line_format              json
         drop_single_key          true
-    [OUTPUT]
-        name          stdout
-        match         *
-        format        json_lines
+    # [OUTPUT]
+    #     name          stdout
+    #     match         *
+    #     format        json_lines
 
   parsers.conf: |
     [PARSER]
