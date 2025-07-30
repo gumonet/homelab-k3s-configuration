@@ -43,18 +43,25 @@ data:
 
   output-loki.conf: |
     [OUTPUT]
-        name stdout
+        name loki
         match         kube.*
-        #host          192.16.0.20
-        #port          3100
-        #uri           /loki/api/v1/push
-        #tenant_id     ""
+        host          192.16.0.20
+        port          3100
+        uri           /loki/api/v1/push
+        tenant_id     ""
         #labels        job=fluent-bit,namespace=$kubernetes['namespace_name'],pod=$kubernetes['pod_name'],container=$kubernetes['container_name']
-        #auto_kubernetes_labels  on
+        auto_kubernetes_labels  on
         #remove_keys   stream,time
         #line_format   json
         retry_limit   False
-        #compress      gzip
+        compress      gzip
+
+    [OUTPUT]
+        name    stdout
+        match   kube.*
+        format  json_lines
+        json_date_key    time
+        json_date_format iso8601
 
   parsers.conf: |
     [PARSER]
