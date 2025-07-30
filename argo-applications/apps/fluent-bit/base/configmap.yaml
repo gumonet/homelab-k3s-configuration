@@ -52,7 +52,7 @@ data:
         #labels        job=fluent-bit,namespace=$kubernetes['namespace_name'],pod=$kubernetes['pod_name'],container=$kubernetes['container_name']
         auto_kubernetes_labels  on
         #remove_keys   stream,time
-        #line_format   json
+        line_format   json
         retry_limit   False
         compress      gzip
 
