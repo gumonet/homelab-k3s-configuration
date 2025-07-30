@@ -61,7 +61,7 @@ data:
     #     line_format              json
     #     drop_single_key          true
     [OUTPUT]
-        name          stout
+        name          stdout
         match         *
         format        json_lines
         json_date_key    time
