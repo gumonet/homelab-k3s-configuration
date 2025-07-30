@@ -45,21 +45,27 @@ data:
         Labels              On
 
   output-loki.conf: |
+    # [OUTPUT]
+    #     name          loki
+    #     match         *
+    #     host          192.16.0.20
+    #     port          3100
+    #     uri           /loki/api/v1/push
+    #     labels        job=fluent-bit,cluster=olympus,container=$kubernetes['container_name']
+    #     remove_keys   kubernetes,stream,time
+    #     auto_kubernetes_labels  on
+    #     structured_metadata      $kubernetes['pod_name'],$kubernetes['namespace_name'],$kubernetes['container_name']
+    #     retry_limit              False
+    #     compress                 gzip
+    #     tenant_id               ""
+    #     line_format              json
+    #     drop_single_key          true
     [OUTPUT]
-        name          loki
+        name          stout
         match         *
-        host          192.16.0.20
-        port          3100
-        uri           /loki/api/v1/push
-        labels        job=fluent-bit,cluster=olympus,container=$kubernetes['container_name']
-        remove_keys   kubernetes,stream,time
-        auto_kubernetes_labels  on
-        structured_metadata      $kubernetes['pod_name'],$kubernetes['namespace_name'],$kubernetes['container_name']
-        retry_limit              False
-        compress                 gzip
-        tenant_id               ""
-        line_format              json
-        drop_single_key          true
+        format        json_lines
+        json_date_key    time
+        json_date_format iso8601
 
   parsers.conf: |
     [PARSER]
