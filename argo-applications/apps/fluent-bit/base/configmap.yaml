@@ -45,7 +45,7 @@ data:
     [OUTPUT]
         name          loki
         match         kube.*
-        host          loki.logging.svc.cluster.local  # o reemplaza por IP o DNS externo
+        host          192.16.0.20
         port          3100
         uri           /loki/api/v1/push
         tenant_id     ""
