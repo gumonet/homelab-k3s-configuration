@@ -12,7 +12,7 @@ data:
         port          3100
         uri           /loki/api/v1/push
         labels        job=fluent-bit,cluster=gumonet,container=$kubernetes['container_name'],pod=$kubernetes['pod_name'],namespace=$kubernetes['namespace_name'],app=$kubernetes['labels']['app']
-        remove_keys   kubernetes,stream,time,app_kubernetes_io_managed_by,helm_sh_chart,install_operator_istio_io_owning_resource,istio_io_dataplane_mode,istio_io_rev,operator_istio_io_component
+        #remove_keys   kubernetes,stream,time,app_kubernetes_io_managed_by,helm_sh_chart,install_operator_istio_io_owning_resource,istio_io_dataplane_mode,istio_io_rev,operator_istio_io_component
         auto_kubernetes_labels  on
         #structured_metadata      container=$kubernetes['container_name'],pod=$kubernetes['pod_name'],namespace=$kubernetes['namespace_name'],app=$kubernetes['labels']['app']
         #structured_metadata    on
