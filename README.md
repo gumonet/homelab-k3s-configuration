@@ -171,4 +171,5 @@ Test logs pods:
 kubectl run testlogger --image=busybox -n default -it --restart=Never -- sh
 # dentro del pod
 while true; do echo "hola $(date)"; sleep 3; done
+while true; do curl api.webserver2.svc.cluster.local && echo "" ; sleep 3; done
 ```
