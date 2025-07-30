@@ -42,9 +42,10 @@ data:
         Merge_Log           On
         Merge_Log_Key       log
         Keep_Log            On
-        K8S-Logging.Exclude Off
-        Annotations         On
         Labels              On
+        Annotations         On
+        K8S-Logging.Parser  On
+        K8S-Logging.Exclude Off
 
     [FILTER]
         Name    parser
@@ -73,7 +74,8 @@ data:
         compress                 gzip
         tenant_id               ""
         line_format              json
-        drop_single_key          true
+        #drop_single_key          true
+
     # [OUTPUT]
     #     name          stdout
     #     match         *

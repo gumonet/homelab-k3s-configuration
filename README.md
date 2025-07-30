@@ -164,3 +164,11 @@ Restart k3s service to apply changes:
 ```bash
 sudo systemctl restart k3s
 ```
+
+Test logs pods:
+
+```bash
+kubectl run testlogger --image=busybox -n default -it --restart=Never -- sh
+# dentro del pod
+while true; do echo "hola $(date)"; sleep 3; done
+```
