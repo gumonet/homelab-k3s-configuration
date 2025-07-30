@@ -22,10 +22,15 @@ spec:
     spec:
       containers:
         - name: webserver1
-          image: public.ecr.aws/nginx/nginx:stable-perl
+          image: 192.16.0.20:5000/service-a:v2
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 80
+            - containerPort: 8080
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://192.16.0.20:4318
+            - name: SERVICE_B_URL
+              value: api.webserver1.svc.cluster.local
           resources:
             requests:
               cpu: 100m
