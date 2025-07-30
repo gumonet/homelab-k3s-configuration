@@ -24,7 +24,8 @@ data:
         Alias             pod-logs-tailer
         Tag               kube.*
         Path              /var/log/containers/*.log
-        Parser            docker
+        #Parser_First      json_log_processed
+        Parser            cri
         DB                /var/log/flb_kube.db
         Mem_Buf_Limit     20MB
         Skip_Long_Lines   On
@@ -38,11 +39,18 @@ data:
         Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
         Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
         Kube_Tag_Prefix     kube.var.log.containers.
-        Merge_Log           On
-        Merge_Log_Key       log
+        #Merge_Log           On
+        #Merge_Log_Key       log
         Keep_Log            Off
         Annotations         On
         Labels              On
+
+    [FILTER]
+        Name    parser
+        Match   kube.*
+        Key_Name message
+        Parser  json_log_processed
+        Reserve_Data  On
 
   output-loki.conf: |
     [OUTPUT]
@@ -67,8 +75,14 @@ data:
 
   parsers.conf: |
     [PARSER]
-        Name        docker
-        Format      json
+        Name        cri
+        Format      regex
+        Regex       ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<message>.*)$
         Time_Key    time
-        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+        Time_Keep   On
+
+    [PARSER]
+        Name        json_log_processed
+        Format      json
         Time_Keep   On
