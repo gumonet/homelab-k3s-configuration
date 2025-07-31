@@ -12,42 +12,52 @@ data:
     defaultChannel: '#demo-app'  # 👈 cambia esto por el canal real en tu Slack
 
   # 🟢 Plantillas de mensaje (vinculadas con `send:` en los triggers)
-  template.app-deployed: |
-    message: |
-      ✅ App '{{.app.metadata.name}}' was successfully deployed to *{{.app.spec.destination.namespace}}*.
-      Health: *{{.app.status.health.status}}* | Sync: *{{.app.status.sync.status}}*
+  # template.app-deployed: |
+  #   message: |
+  #     ✅ App '{{.app.metadata.name}}' was successfully deployed to *{{.app.spec.destination.namespace}}*.
+  #     Health: *{{.app.status.health.status}}* | Sync: *{{.app.status.sync.status}}*
 
-    slack:
-      attachments:
-        - color: "#00FF00"
-          text: "{{.app.metadata.name}} deployed successfully ✅"
+  #   slack:
+  #     attachments:
+  #       - color: "#00FF00"
+  #         text: "{{.app.metadata.name}} deployed successfully ✅"
 
   template.app-sync-failed: |
     message: |
-      ❌ App '{{.app.metadata.name}}' failed to sync.
-      Status: *{{.app.status.sync.status}}*
-      Message: {{.app.status.operationState.message}}
-
+      Application {{.app.metadata.name}} sync is {{.app.status.sync.status}}.
+      Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
     slack:
-      attachments:
-        - color: "#FF0000"
-          text: "{{.app.metadata.name}} failed to sync ❌"
+    attachments: |
+      [{
+        "title": "{{.app.metadata.name}}",
+        "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+        "color": "#18be52",
+        "fields": [{
+          "title": "Sync Status",
+          "value": "{{.app.status.sync.status}}",
+          "short": true
+        }, {
+          "title": "Repository",
+          "value": "{{.app.spec.source.repoURL}}",
+          "short": true
+        }]
+      }]
 
-  template.app-sync-running: |
-    message: |
-      🚀 Syncing '{{.app.metadata.name}}'...
-      Destination: {{.app.spec.destination.server}} (ns: {{.app.spec.destination.namespace}})
+  # template.app-sync-running: |
+  #   message: |
+  #     🚀 Syncing '{{.app.metadata.name}}'...
+  #     Destination: {{.app.spec.destination.server}} (ns: {{.app.spec.destination.namespace}})
 
-    slack:
-      attachments:
-        - color: "#439FE0"
-          text: "{{.app.metadata.name}} syncing in progress 🚀"
+  #   slack:
+  #     attachments:
+  #       - color: "#439FE0"
+  #         text: "{{.app.metadata.name}} syncing in progress 🚀"
 
   # 🟠 Triggers que usan esas plantillas
   trigger.on-sync-status-change: |
     - when: app.status.sync.status == 'Synced'
       send: 
-        - app-sync-running
+        - app-sync-failed
     - when: app.status.sync.status == 'OutOfSync'
       send: 
         - app-sync-failed
@@ -55,7 +65,7 @@ data:
   trigger.on-successful-sync: |
     - when: app.status.sync.status == 'Synced' and app.status.health.status == 'Healthy'
       send: 
-        - app-deployed
+        - app-sync-failed
 
 ---
 apiVersion: v1
