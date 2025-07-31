@@ -6,8 +6,9 @@ metadata:
   labels:
     scope: applications
   annotations:
-    notifications.argoproj.io/subscribe.on-sync-status-change: slack
     notifications.argoproj.io/subscribe.on-successful-sync: slack
+    notifications.argoproj.io/subscribe.on-sync-failed: slack
+    notifications.argoproj.io/subscribe.on-sync-status-change: slack
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
