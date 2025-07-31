@@ -5,10 +5,6 @@ metadata:
   namespace: argocd
   labels:
     scope: applications
-  annotations:
-    notifications.argoproj.io/subscribe.on-sync-status-change.slack: slack
-    notifications.argoproj.io/subscribe.on-successful-sync.slack: slack
-    notifications.argoproj.io/subscribe.on-sync-failed.slack: slack
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
