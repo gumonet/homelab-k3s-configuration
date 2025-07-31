@@ -39,7 +39,7 @@ data:
   trigger.on-successful-sync: |
     - when: app.status.sync.status == 'Synced' and app.status.health.status == 'Healthy'
       send: 
-        - app-sync-failed
+        - app-sync-running
 
   subscriptions: |
     - recipients:
