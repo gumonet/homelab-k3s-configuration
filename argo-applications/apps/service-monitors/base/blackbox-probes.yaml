@@ -22,7 +22,7 @@ spec:
         module: [http_2xx]
         target:
           - http://api.webserver1.svc.cluster.local/
-          - http://api.webserver1.svc.cluster.local/
+          - http://api.webserver2.svc.cluster.local/
       relabelings:
         - sourceLabels: [__param_target]
           targetLabel: instance
