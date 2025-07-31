@@ -4,4 +4,3 @@ metadata:
   name: utils-client
   labels:
     mesh: gumonet
-    istio-injection: enabled
