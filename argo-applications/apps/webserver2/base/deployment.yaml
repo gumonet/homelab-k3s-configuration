@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: webserver2
-          image: 192.16.0.20:5000/service-b:v2
+          image: 192.16.0.20:5000/service-b:v1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8081
