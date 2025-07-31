@@ -10,3 +10,6 @@ resources:
   #Istio
   - istiod-monitor.yaml
   - istio-envoy-monitor.yaml
+
+  #ArgoCD Notifications
+  - argocd-notifications-config.yaml

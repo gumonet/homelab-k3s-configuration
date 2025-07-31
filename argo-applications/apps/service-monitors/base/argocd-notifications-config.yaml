@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-notifications-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-notifications-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  service.slack: |
+    webhook: $slack-webhook
+
+  template.app-deployed: |
+    message: |
+      ✅ App '{{.app.metadata.name}}' deployed successfully ({{.app.status.sync.status}}) to {{.app.spec.destination.namespace}}
+
+  template.app-sync-failed: |
+    message: |
+      ❌ App '{{.app.metadata.name}}' failed to sync: {{.app.status.operationState.message}}
+
+  template.app-sync-running: |
+    message: |
+      🚀 App '{{.app.metadata.name}}' is syncing...
+
+  trigger.on-sync-status-change: |
+    when: app.status.operationState.phase in ['Running']
+    send: [app-sync-running]
+
+  trigger.on-successful-sync: |
+    when: app.status.operationState.phase == 'Succeeded' and app.status.health.status == 'Healthy'
+    send: [app-deployed]
+
+  trigger.on-sync-failed: |
+    when: app.status.operationState.phase in ['Error', 'Failed']
+    send: [app-sync-failed]
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: argocd-notifications-secret
+  namespace: argocd
+type: Opaque
+stringData:
+  slack-webhook: "https://hooks.slack.com/services/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"
