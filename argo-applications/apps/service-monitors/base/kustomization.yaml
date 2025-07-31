@@ -16,3 +16,4 @@ resources:
 
   #Blackbox Exporter
   - blackbox-servicemonitor.yaml
+  - blackbox-probes.yaml
