@@ -95,6 +95,7 @@ helm install argocd argo/argo-cd \
   --set server.metrics.serviceMonitor.enabled=false \
   --set repoServer.metrics.enabled=true \
   --set repoServer.metrics.serviceMonitor.enabled=false \
+  --set configs.cm.application.dependencies.enabled=true \
   --set configs.secret.argocdServerAdminPassword='temppwd'
 
 ## Only update argocd
@@ -105,6 +106,7 @@ helm install argocd argo/argo-cd \
   --set server.metrics.enabled=true \
   --set server.metrics.serviceMonitor.enabled=false \
   --set repoServer.metrics.enabled=true \
+  --set configs.cm.application.dependencies.enabled=true \
   --set repoServer.metrics.serviceMonitor.enabled=false
 
 # Genera la contraseña en bcrypt

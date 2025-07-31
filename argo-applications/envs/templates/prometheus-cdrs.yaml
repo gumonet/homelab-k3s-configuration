@@ -6,10 +6,12 @@ metadata:
   labels:
     scope: monitoring
 spec:
-  project: default
+  project: dev
   destination:
     namespace: monitoring
-    server: https://kubernetes.default.svc
+    server:
+      # prettier-ignore
+      {{ .Values.destinationServer | default .Values.spec.destination.server }}
   source:
     repoURL: https://github.com/prometheus-operator/prometheus-operator.git
     path: example/prometheus-operator-crd
