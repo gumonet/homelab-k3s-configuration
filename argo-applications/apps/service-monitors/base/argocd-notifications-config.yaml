@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -67,3 +68,12 @@ data:
       triggers:
         - on-sync-status-change
         - on-successful-sync
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: argocd-notifications-secret
+  namespace: argocd
+type: Opaque
+stringData:
+  slack-token: "xoxb-274764143302-9271181208455-jC83xs9SZJLgyQu3bCfTNtXj"
