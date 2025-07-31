@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: prometheus
   namespace: argocd
+  labels:
+    scope: monitoring
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:

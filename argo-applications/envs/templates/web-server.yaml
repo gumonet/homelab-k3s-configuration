@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: webserver1
   namespace: argocd
+  labels:
+    scope: applications
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
