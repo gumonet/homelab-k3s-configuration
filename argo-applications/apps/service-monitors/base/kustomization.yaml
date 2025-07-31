@@ -13,3 +13,6 @@ resources:
 
   #ArgoCD Notifications
   - argocd-notifications-config.yaml
+
+  #Blackbox Exporter
+  - blackbox-servicemonitor.yaml
