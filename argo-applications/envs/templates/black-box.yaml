@@ -17,7 +17,7 @@ spec:
   source:
     # prettier-ignore
     repoURL: https://prometheus-community.github.io/helm-charts
-    chart: blackbox-exporter
+    chart: prometheus-blackbox-exporter
     targetRevision: latest
     helm:
       values: |
