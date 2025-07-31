@@ -8,8 +8,6 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  dependsOn:
-    - name: webserver2
   project: dev
   destination:
     namespace: webserver1
