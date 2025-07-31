@@ -89,7 +89,23 @@ kubectl create namespace argocd
 #Install argocd
 helm install argocd argo/argo-cd \
   --namespace argocd \
+  --set controller.metrics.enabled=true \
+  --set controller.metrics.serviceMonitor.enabled=false \
+  --set server.metrics.enabled=true \
+  --set server.metrics.serviceMonitor.enabled=false \
+  --set repoServer.metrics.enabled=true \
+  --set repoServer.metrics.serviceMonitor.enabled=false \
   --set configs.secret.argocdServerAdminPassword='temppwd'
+
+## Only update argocd
+  helm upgrade argocd argo/argo-cd \
+  --namespace argocd \
+  --set controller.metrics.enabled=true \
+  --set controller.metrics.serviceMonitor.enabled=false \
+  --set server.metrics.enabled=true \
+  --set server.metrics.serviceMonitor.enabled=false \
+  --set repoServer.metrics.enabled=true \
+  --set repoServer.metrics.serviceMonitor.enabled=false
 
 # Genera la contraseña en bcrypt
 export ARGOCD_ADMIN_PASSWORD=$(htpasswd -nbBC 10 "" "MyNewSecurePassword" | tr -d ':\n' | sed 's/^\\$2y/\\$2a/')
@@ -129,20 +145,6 @@ kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-oper
 ```
 
 # Enable metrics
-
-## Metrics for argocd
-
-```bash
-helm upgrade argocd argo/argo-cd \
-  --namespace argocd \
-  -f config-manifest/argocd-values.yaml
-```
-
-## Metrics for istio
-
-```bash
-kubectl apply -f config-manifest/istio-telemetry.yaml
-```
 
 ## Set your custom registry in k3s
 

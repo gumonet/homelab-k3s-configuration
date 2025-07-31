@@ -1,0 +1,43 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: istio-envoy-sidecars
+  namespace: monitoring # ⚠️ Donde vive Prometheus Operator
+  labels:
+    release: prometheus # ⚠️ Asegúrate que coincide con tu Prometheus
+spec:
+  namespaceSelector:
+    matchNames:
+      - webserver1
+      - webserver2
+      - istio-system # ✅ Incluye si también quieres ver métricas del proxy en istio-system
+  selector:
+    matchExpressions:
+      - key: topology.istio.io/network
+        operator: Exists # Solo scrapea pods con sidecar de Istio
+  podMetricsEndpoints:
+    - path: /stats/prometheus
+      interval: 30s
+      scheme: http
+      relabelings:
+        # Scrapea solo si está habilitado explícitamente
+        - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: "true"
+        # Usa el path definido en la anotación (aunque ya lo definiste en `path`, esto lo refuerza si cambia)
+        - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+          action: replace
+          targetLabel: __metrics_path__
+          regex: (.+)
+          replacement: $1
+        # Filtra solo el sidecar de Istio
+        - sourceLabels: [__meta_kubernetes_pod_container_name]
+          regex: istio-proxy
+          action: keep
+        # Reconstruye la dirección con la IP del pod y el puerto definido por anotación
+        # prettier-ignore
+        - sourceLabels: [__meta_kubernetes_pod_ip,__meta_kubernetes_pod_annotation_prometheus_io_port]
+          action: replace
+          targetLabel: __address__
+          regex: (.+);(.+)
+          replacement: ${1}:${2}
