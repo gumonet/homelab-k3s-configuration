@@ -67,6 +67,13 @@ data:
       send: 
         - app-sync-failed
 
+  subscriptions: |
+    - recipients:
+        - slack
+      triggers:
+        - on-sync-status-change
+        - on-successful-sync
+
 ---
 apiVersion: v1
 kind: Secret
