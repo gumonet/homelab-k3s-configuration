@@ -9,6 +9,7 @@ metadata:
 data:
   service.slack: |
     token: $slack-token
+    defaultChannel: '#demo-app'  # 👈 cambia esto por el canal real en tu Slack
 
   template.app-deployed: |
     message: |
@@ -35,10 +36,6 @@ data:
       send: 
         - app-deployed
 
-  # trigger.on-sync-failed: |
-  #   - when: app.status.operationState.phase in ['Error', 'Failed']
-  #     send:
-  #       - app-sync-failed
 ---
 apiVersion: v1
 kind: Secret
