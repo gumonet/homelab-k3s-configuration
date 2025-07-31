@@ -23,16 +23,19 @@ data:
       🚀 App '{{.app.metadata.name}}' is syncing...
 
   trigger.on-sync-status-change: |
-    when: app.status.operationState.phase in ['Running']
-    send: [app-sync-running]
+    - when: app.status.operationState.phase in ['Running']
+      send: 
+        - app-sync-running
 
   trigger.on-successful-sync: |
-    when: app.status.operationState.phase == 'Succeeded' and app.status.health.status == 'Healthy'
-    send: [app-deployed]
+    - when: app.status.operationState.phase == 'Succeeded' and app.status.health.status == 'Healthy'
+      send: 
+        - app-deployed
 
   trigger.on-sync-failed: |
-    when: app.status.operationState.phase in ['Error', 'Failed']
-    send: [app-sync-failed]
+    - when: app.status.operationState.phase in ['Error', 'Failed']
+      send: 
+        - app-sync-failed
 ---
 apiVersion: v1
 kind: Secret
