@@ -9,37 +9,57 @@ metadata:
 data:
   service.slack: |
     token: $slack-token
-    defaultChannel: '#demo-app'  # 👈 cambia esto por el canal real en tu Slack
-
-  # 🟢 Plantillas de mensaje (vinculadas con `send:` en los triggers)
-  template.app-deployed: |
-    message: |
-      ✅ App '{{.app.metadata.name}}' was successfully deployed to *{{.app.spec.destination.namespace}}*.
-      Health: *{{.app.status.health.status}}* | Sync: *{{.app.status.sync.status}}*
-
-  template.app-sync-failed: |
-    message: |
-      ❌ Application {{.app.metadata.name}} sync is {{.app.status.sync.status}}.
-      Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+    defaultChannel: '#demo-app'
 
   template.app-sync-running: |
     message: |
-      🚀 Syncing '{{.app.metadata.name}}'...
-      Destination: {{.app.spec.destination.server}} (ns: {{.app.spec.destination.namespace}})
+      🔄 Syncing *{{.app.metadata.name}}*...
+      • Namespace: `{{.app.spec.destination.namespace}}`
+      • Server: `{{.app.spec.destination.server}}`
+      • Repo: `{{.app.spec.source.repoURL}}` @ `{{.app.spec.source.targetRevision}}`
+      • Path: `{{.app.spec.source.path}}`
+      🔗 {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
 
-  # 🟠 Triggers que usan esas plantillas
+  template.app-sync-failed: |
+    message: |
+      ❌ Sync FAILED for *{{.app.metadata.name}}*
+      • Namespace: `{{.app.spec.destination.namespace}}`
+      • Status: *{{.app.status.sync.status}}*
+      • Health: *{{.app.status.health.status}}*
+      • Reason: {{.app.status.operationState.message}}
+      🔗 {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+
+  template.app-deployed: |
+    message: |
+      ✅ *{{.app.metadata.name}}* deployed successfully
+      • Namespace: `{{.app.spec.destination.namespace}}`
+      • Health: *{{.app.status.health.status}}*
+      • Repo: `{{.app.spec.source.repoURL}}` @ `{{.app.spec.source.targetRevision}}`
+      🔗 {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+
+  template.app-degraded: |
+    message: |
+      ⚠️ *{{.app.metadata.name}}* sync completed, but app is NOT healthy
+      • Namespace: `{{.app.spec.destination.namespace}}`
+      • Sync: *{{.app.status.sync.status}}*
+      • Health: *{{.app.status.health.status}}*
+      🔗 {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+
   trigger.on-sync-status-change: |
-    - when: app.status.sync.status == 'Synced'
-      send: 
+    - when: app.status.operationState.phase == 'Running'
+      send:
         - app-sync-running
-    - when: app.status.sync.status == 'OutOfSync'
-      send: 
+    - when: app.status.operationState.phase in ['Error', 'Failed']
+      send:
         - app-sync-failed
+    - when: app.status.sync.status == 'Synced' and app.status.health.status != 'Healthy'
+      send:
+        - app-degraded
 
   trigger.on-successful-sync: |
     - when: app.status.sync.status == 'Synced' and app.status.health.status == 'Healthy'
-      send: 
-        - app-sync-deployed
+      send:
+        - app-deployed
 
   subscriptions: |
     - recipients:
@@ -47,13 +67,3 @@ data:
       triggers:
         - on-sync-status-change
         - on-successful-sync
-
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: argocd-notifications-secret
-  namespace: argocd
-type: Opaque
-stringData:
-  slack-token: "xoxb-274764143302-9271181208455-jC83xs9SZJLgyQu3bCfTNtXj"
