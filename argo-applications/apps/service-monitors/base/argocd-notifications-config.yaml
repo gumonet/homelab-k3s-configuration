@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
 data:
   service.slack: |
-    webhook: $slack-webhook
+    token: $slack-token
 
   template.app-deployed: |
     message: |
@@ -23,19 +23,22 @@ data:
       🚀 App '{{.app.metadata.name}}' is syncing...
 
   trigger.on-sync-status-change: |
-    - when: app.status.operationState.phase in ['Running']
+    - when: app.status.sync.status == 'Synced'
       send: 
         - app-sync-running
+    - when: app.status.sync.status == 'OutOfSync'
+      send: 
+        - app-sync-failed
 
   trigger.on-successful-sync: |
-    - when: app.status.operationState.phase == 'Succeeded' and app.status.health.status == 'Healthy'
+    - when: app.status.sync.status == 'Synced' and app.status.health.status == 'Healthy'
       send: 
         - app-deployed
 
-  trigger.on-sync-failed: |
-    - when: app.status.operationState.phase in ['Error', 'Failed']
-      send: 
-        - app-sync-failed
+  # trigger.on-sync-failed: |
+  #   - when: app.status.operationState.phase in ['Error', 'Failed']
+  #     send:
+  #       - app-sync-failed
 ---
 apiVersion: v1
 kind: Secret
@@ -44,4 +47,4 @@ metadata:
   namespace: argocd
 type: Opaque
 stringData:
-  slack-webhook: "https://hooks.slack.com/services/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"
+  slack-token: "xoxb-274764143302-9271181208455-jC83xs9SZJLgyQu3bCfTNtXj"
