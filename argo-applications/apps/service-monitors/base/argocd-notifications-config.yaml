@@ -69,7 +69,7 @@ data:
 
   subscriptions: |
     - recipients:
-        - demo-app
+        - slack:demo-app
       triggers:
         - on-sync-status-change
         - on-successful-sync
