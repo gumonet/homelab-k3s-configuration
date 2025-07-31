@@ -56,8 +56,6 @@ data:
     - when: app.status.sync.status == 'Synced' and app.status.health.status != 'Healthy'
       send:
         - app-degraded
-
-  trigger.on-successful-sync: |
     - when: app.status.sync.status == 'Synced' and app.status.health.status == 'Healthy'
       send:
         - app-deployed
@@ -67,7 +65,6 @@ data:
         - slack:demo-app
       triggers:
         - on-sync-status-change
-        - on-successful-sync
 ---
 apiVersion: v1
 kind: Secret
