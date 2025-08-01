@@ -73,4 +73,4 @@ metadata:
   namespace: argocd
 type: Opaque
 stringData:
-  slack-token: "xoxb-274764143302-9271181208455-jC83xs9SZJLgyQu3bCfTNtXj"
+  slack-token: #slack-token
