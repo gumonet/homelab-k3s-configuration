@@ -1,30 +1,18 @@
 apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+kind: Probe
 metadata:
-  name: blackbox-probes
+  name: blackbox-probe-webservices
   namespace: monitoring
   labels:
     release: prometheus
 spec:
-  jobLabel: blackbox-probe
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: prometheus-blackbox-exporter
-  namespaceSelector:
-    matchNames:
-      - monitoring
-  endpoints:
-    - port: http
-      path: /probe
-      interval: 30s
-      scrapeTimeout: 10s
-      params:
-        module: [http_2xx]
-        target: [http://api.webserver1.svc.cluster.local]
-      relabelings:
-        - sourceLabels: [__param_target]
-          targetLabel: instance
-        - sourceLabels: [__address__]
-          targetLabel: __param_target
-        - targetLabel: __address__
-          replacement: blackbox-exporter.monitoring.svc.cluster.local:9115
+  jobName: blackbox-probe
+  prober:
+    url: blackbox-exporter.monitoring.svc.cluster.local:9115
+  module: http_2xx
+  interval: 5s
+  targets:
+    staticConfig:
+      static:
+        - http://api.webserver1.svc.cluster.local
+        - http://api.webserver2.svc.cluster.local
