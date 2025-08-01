@@ -60,11 +60,11 @@ data:
       send:
         - app-deployed
 
-  subscriptions: |
-    - recipients:
-        - slack:demo-app
-      triggers:
-        - on-sync-status-change
+  # subscriptions: |
+  #   - recipients:
+  #       - slack:demo-app
+  #     triggers:
+  #       - on-sync-status-change
 ---
 apiVersion: v1
 kind: Secret

@@ -5,6 +5,9 @@ metadata:
   namespace: argocd
   labels:
     scope: monitoring
+  annotations:
+    notifications.argoproj.io/subscribe.on-sync-status-change.slack: demo-app
+
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
