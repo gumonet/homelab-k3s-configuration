@@ -79,7 +79,7 @@ helm upgrade cni istio/cni \
 
 # Install argocd in cluster using charts
 
-```bash
+````bash
 helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update
 kubectl create namespace argocd
@@ -112,24 +112,38 @@ helm install argocd argo/argo-cd \
 # Genera la contraseña en bcrypt
 export ARGOCD_ADMIN_PASSWORD=$(htpasswd -nbBC 10 "" "MyNewSecurePassword" | tr -d ':\n' | sed 's/^\\$2y/\\$2a/')
 
+## Set token for slack notifications
+ 1. Create a new Slack application in your Slack workspace, follow this [guide](https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/services/slack/).
+ 2. Upload the slack token to new secret in ArgoCD namespace:
+```bash
+  kubectl create secret generic argocd-notifications-secret \
+  --from-literal=slack-token=REAL_TOKEN \
+  -n argocd
+````
+
+Replace `REAL_TOKEN` with the token you obtained from the Slack application.
+
 # Parchea el Secret
+
 kubectl -n argocd patch secret argocd-secret \
-  -p "{\"stringData\": {\"admin.password\": \"$ARGOCD_ADMIN_PASSWORD\"}}"
+ -p "{\"stringData\": {\"admin.password\": \"$ARGOCD_ADMIN_PASSWORD\"}}"
 
 #Update password if is necessary
 helm upgrade argocd argo/argo-cd \
-  --namespace argocd \
-  --reuse-values \
-  --set configs.secret.argocdServerAdminPassword='<bcrypt-password>'
+ --namespace argocd \
+ --reuse-values \
+ --set configs.secret.argocdServerAdminPassword='<bcrypt-password>'
 
 # Update argocd password using kubectl
+
 kubectl -n argocd patch secret argocd-secret \
-  --type merge \
-  -p '{"stringData": {
-    "admin.password": "$2y$10$gKQfWrNbPkJvw8BQqy6et.ml83vcrzi380l1pGQEz7U96pH0w2tHS",
-    "admin.passwordMtime": "'$(date +%FT%T%Z)'"
-  }}'
-```
+ --type merge \
+ -p '{"stringData": {
+"admin.password": "$2y$10$gKQfWrNbPkJvw8BQqy6et.ml83vcrzi380l1pGQEz7U96pH0w2tHS",
+"admin.passwordMtime": "'$(date +%FT%T%Z)'"
+}}'
+
+````
 
 # Configure CDRS for prometheus operator
 
@@ -144,7 +158,7 @@ kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-oper
 kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml
 kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
 kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml
-```
+````
 
 # Prometheus Blackbox
 
@@ -180,5 +194,7 @@ Test logs pods:
 kubectl run testlogger --image=busybox -n default -it --restart=Never -- sh
 # dentro del pod
 while true; do echo "hola $(date)"; sleep 3; done
-while true; do curl api.webserver1.svc.cluster.local && echo "" ; sleep 3; done
+while true; do curl api.switch.svc.cluster.local/health && echo "" ; sleep 3; done
 ```
+
+kubectl run testlogger --image=nicolaka/netshoot:latest -n default -it --restart=Never -- sh
