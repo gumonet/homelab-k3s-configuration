@@ -202,6 +202,10 @@ Test logs pods:
 kubectl run testlogger --image=busybox -n default -it --restart=Never -- sh
 # dentro del pod
 while true; do echo "hola $(date)"; sleep 3; done
+<<<<<<< HEAD
+=======
+
+>>>>>>> 55333e0 (Update README.md)
 while true; do curl api.mi-servicio.svc.cluster.local/health && echo "" ; sleep 3; done
 
 kubectl run testlogger --image=nicolaka/netshoot:latest -n default -it --restart=Never -- sh
