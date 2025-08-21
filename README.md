@@ -203,4 +203,5 @@ kubectl run testlogger --image=busybox -n default -it --restart=Never -- sh
 # dentro del pod
 while true; do echo "hola $(date)"; sleep 3; done
 
+
 ```
