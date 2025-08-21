@@ -201,6 +201,4 @@ Test logs pods:
 ```bash
 kubectl run testlogger --image=busybox -n default -it --restart=Never -- sh
 # dentro del pod
-
-
 ```
