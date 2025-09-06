@@ -208,3 +208,8 @@ while true; do curl api.mi-servicio.svc.cluster.local/health && echo "" ; sleep 
 kubectl run testlogger --image=nicolaka/netshoot:latest -n default -it --restart=Never -- sh
 
 ```
+<<<<<<< HEAD
+=======
+
+```
+>>>>>>> 3b3b343 (Add kubeconfig retrieval instructions and fix formatting in README)
