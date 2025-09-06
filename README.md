@@ -72,7 +72,7 @@ helm upgrade istiod istio/istiod \
   --set values.global.istioNamespace=istio-system
 ```
 
-## Install istio cni
+## Install istio cni ()
 
 ```bash
 helm upgrade cni istio/cni \
@@ -85,14 +85,15 @@ helm upgrade cni istio/cni \
 
 # Install argocd in cluster using charts
 
-````bash
+```bash
 helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update
 kubectl create namespace argocd
+```
 
-#Create argocd password
+##Install argocd
 
-#Install argocd
+```bash
 helm install argocd argo/argo-cd \
   --namespace argocd \
   --set controller.metrics.enabled=true \
@@ -103,8 +104,11 @@ helm install argocd argo/argo-cd \
   --set repoServer.metrics.serviceMonitor.enabled=false \
   --set configs.cm.application.dependencies.enabled=true \
   --set configs.secret.argocdServerAdminPassword='temppwd'
+```
 
 ## Only update argocd
+
+```bash
   helm upgrade argocd argo/argo-cd \
   --namespace argocd \
   --set controller.metrics.enabled=true \
@@ -114,42 +118,40 @@ helm install argocd argo/argo-cd \
   --set repoServer.metrics.enabled=true \
   --set configs.cm.application.dependencies.enabled=true \
   --set repoServer.metrics.serviceMonitor.enabled=false
+```
 
-# Genera la contraseña en bcrypt
-export ARGOCD_ADMIN_PASSWORD=$(htpasswd -nbBC 10 "" "MyNewSecurePassword" | tr -d ':\n' | sed 's/^\\$2y/\\$2a/')
+### Genera la contraseña en bcrypt
 
-## Set token for slack notifications
- 1. Create a new Slack application in your Slack workspace, follow this [guide](https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/services/slack/).
- 2. Upload the slack token to new secret in ArgoCD namespace:
 ```bash
-  kubectl create secret generic argocd-notifications-secret \
-  --from-literal=slack-token=REAL_TOKEN \
-  -n argocd
-````
+export ARGOCD_ADMIN_PASSWORD=$(htpasswd -nbBC 10 "" "Gumonet01" | tr -d ':\n' | sed 's/^\\$2y/\\$2a/')
+```
 
-Replace `REAL_TOKEN` with the token you obtained from the Slack application.
+### Parchea el Secret
 
-# Parchea el Secret
-
+```bash
 kubectl -n argocd patch secret argocd-secret \
  -p "{\"stringData\": {\"admin.password\": \"$ARGOCD_ADMIN_PASSWORD\"}}"
+```
 
-#Update password if is necessary
+### Update password if is necessary
+
+```bash
 helm upgrade argocd argo/argo-cd \
  --namespace argocd \
  --reuse-values \
  --set configs.secret.argocdServerAdminPassword='<bcrypt-password>'
+```
 
-# Update argocd password using kubectl
+### Update argocd password using kubectl
 
+```bash
 kubectl -n argocd patch secret argocd-secret \
  --type merge \
  -p '{"stringData": {
 "admin.password": "$2y$10$gKQfWrNbPkJvw8BQqy6et.ml83vcrzi380l1pGQEz7U96pH0w2tHS",
 "admin.passwordMtime": "'$(date +%FT%T%Z)'"
 }}'
-
-````
+```
 
 # Configure CDRS for prometheus operator
 
@@ -164,7 +166,7 @@ kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-oper
 kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml
 kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
 kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml
-````
+```
 
 # Prometheus Blackbox
 
