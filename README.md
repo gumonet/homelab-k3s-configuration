@@ -6,6 +6,12 @@ This script installs k3s, a lightweight Kubernetes distribution.
 curl -sfL https://get.k3s.io | sh -
 ```
 
+## Get kubeconfig
+
+```bash
+sudo cat /etc/rancher/k3s/k3s.yaml
+```
+
 # Install istio in cluster using charts
 
 ```bash
@@ -198,3 +204,7 @@ while true; do curl api.mi-servicio.svc.cluster.local/health && echo "" ; sleep 
 ```
 
 kubectl run testlogger --image=nicolaka/netshoot:latest -n default -it --restart=Never -- sh
+
+```
+
+```
