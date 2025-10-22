@@ -24,6 +24,6 @@ spec:
     targetRevision: {{ .Values.spec.source.targetRevision }}
     path: argo-applications/apps/service-monitors/overlays
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+    # automated:
+    #   prune: true
+    #   selfHeal: true

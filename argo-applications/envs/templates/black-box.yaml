@@ -34,8 +34,8 @@ spec:
                 method: GET
                 preferred_ip_protocol: "ip4"
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    # syncOptions:
+    #   - CreateNamespace=true
